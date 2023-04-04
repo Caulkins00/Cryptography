@@ -3,6 +3,7 @@ import base64
 import os
 import hashlib
 import json
+import sqlite3
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -10,8 +11,6 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 userDB = 'userDB.json'
 file = open(userDB)
 users = json.load(file)
-for entry in users:
-    print(entry['username'])
 file.close()
 
 def is_valid_credentials(username, password):
