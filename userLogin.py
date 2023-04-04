@@ -10,7 +10,6 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 userDB = 'userDB.json'
 file = open(userDB)
 users = json.load(file)
-print(type(users))
 for entry in users:
     print(entry['username'])
 file.close()
