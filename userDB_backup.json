@@ -1,0 +1,27 @@
+[
+    {
+      "username": "will",
+      "password_hash": "123",
+      "salt": "abc"
+    },
+    {
+      "username": "henry",
+      "password_hash": "123",
+      "salt": "abc"
+    },
+    {
+      "username": "sarah",
+      "password_hash": "123",
+      "salt": "abc"
+    },
+    {
+      "username": "george",
+      "password_hash": "123",
+      "salt": "abc"
+    },
+    {
+      "username": "christina",
+      "password_hash": "123",
+      "salt": "abc"
+    }
+  ]
