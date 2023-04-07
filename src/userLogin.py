@@ -15,15 +15,14 @@ cur = con.cursor()
 # print(res.fetchall())
 
 def is_valid_credentials(username, password):
-
     res = cur.execute("SELECT * FROM users WHERE username =?", (username,))
     user = res.fetchone()
     password_hash = hashlib.sha256(password+bytes(user[2],'utf-8')).hexdigest()
     if password_hash == user[1]:
-        print('Success!')
+        # print('Success!')
         return True
     else:
-        print('Incorrect username or password... Try again!')
+        # print('Incorrect username or password... Try again!')
         return False
 
 def prompt_login():
