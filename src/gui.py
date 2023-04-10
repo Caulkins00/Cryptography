@@ -84,7 +84,7 @@ class Window(QWidget):
         self.addPageLayout.addWidget(self.lineEditAdd_password, 1, 1)
 
         button_add = QPushButton('Add User')
-        # button_add.clicked.connect(add_user_gui())
+        button_add.clicked.connect(self.switch_table)
         button_add.setStyleSheet("background-color: rgb(136, 145, 158);")
         self.addPageLayout.addWidget(button_add, 2, 0, 1, 2)
         self.addPageLayout.setRowMinimumHeight(2, 75)
@@ -113,6 +113,9 @@ class Window(QWidget):
 
     def add_user(self):
          self.stackedLayout.setCurrentIndex(2)
+
+    def switch_table(self):
+         self.stackedLayout.setCurrentIndex(1)
 
     def populate_table(master_password, self):
          pass
