@@ -39,10 +39,18 @@ def add_user():
     con.commit()
     print('User added!')
 
-def add_user_gui():
-    
-    # this needs to be basically the same as the above, but utilizing the gui interface instead of cmd line
-    pass
+def add_user_gui(username, password):
+    salt = os.urandom(16).hex()
+
+    count = cur.execute("SELECT COUNT(username) FROM users WHERE username =?", (username,)).fetchone()[0]
+    table_count = cur.execute("SELECT COUNT(username) FROM users").fetchone()[0]
+    if count>0 and table_count>0:
+        return False
+    else:
+        password_hash = hashlib.sha256(password+bytes(salt,'utf-8')).hexdigest()
+        cur.execute("INSERT INTO users VALUES (?,?,?)", (username,password_hash,salt,))
+        con.commit()
+        return True
 
 def remove_user(username):
     password = getpass.getpass('Enter the password of the user you would like to remove: ').encode()

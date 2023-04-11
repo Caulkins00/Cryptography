@@ -51,7 +51,7 @@ class Window(QWidget):
         self.loginPageLayout.addWidget(self.label_message, 3, 0, 1, 2)
 
         add_button = QPushButton('New here? Create an account!')
-        add_button.clicked.connect(self.add_user)
+        add_button.clicked.connect(self.switch_add)
         add_button.setStyleSheet("background-color: rgb(136, 145, 158);")
         self.loginPageLayout.addWidget(add_button, 4, 0, 1, 2)
 
@@ -62,14 +62,12 @@ class Window(QWidget):
         self.tablePageLayout = QVBoxLayout()
         self.label = QLabel('Congrats!')
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # self.tablePage.setAttribute(Qt.WA_StyledBackground, True)
-        # self.tablePage.setStyleSheet('background-color: red;')
         self.tablePageLayout.addWidget(self.label)
 
         self.addPage = QWidget()
         self.addPageLayout = QGridLayout()
 
-        add_name = QLabel('<font size="4"> Username </font>')
+        add_name = QLabel('<font size="3"> Username </font>')
         self.lineEditAdd_username = QLineEdit()
         self.lineEditAdd_username.setPlaceholderText('Please enter your username')
         self.lineEditAdd_username.setStyleSheet("background-color: rgb(136, 145, 158);")
@@ -84,11 +82,14 @@ class Window(QWidget):
         self.addPageLayout.addWidget(self.lineEditAdd_password, 1, 1)
 
         button_add = QPushButton('Add User')
-        button_add.clicked.connect(self.switch_table)
+        button_add.clicked.connect(self.add_user)
         button_add.setStyleSheet("background-color: rgb(136, 145, 158);")
         self.addPageLayout.addWidget(button_add, 2, 0, 1, 2)
         self.addPageLayout.setRowMinimumHeight(2, 75)
 
+        self.label_message_add = QLabel('<font size="4"> Hi! </font>',self)
+        self.label_message_add.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.addPageLayout.addWidget(self.label_message_add, 3, 0, 1, 2)
 
         self.setStyleSheet("background-color: rgb(106,137,189);")
 
@@ -111,14 +112,17 @@ class Window(QWidget):
             self.label_message.setText('<font size="4"> Incorrect username or password. Please try again. </font>')
             # msg.exec()
 
-    def add_user(self):
-         self.stackedLayout.setCurrentIndex(2)
+    def switch_add(self):
+        self.stackedLayout.setCurrentIndex(2)
 
-    def switch_table(self):
-         self.stackedLayout.setCurrentIndex(1)
+    def add_user(self):
+        if add_user_gui(self.lineEditAdd_username.text(), self.lineEditAdd_password.text().encode()):
+            self.stackedLayout.setCurrentIndex(1)
+        else:
+            self.label_message_add.setText('<font size="3"> This username is already taken by another user. Please pick a new one. </font>')
 
     def populate_table(master_password, self):
-         pass
+        pass
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
