@@ -10,13 +10,30 @@ from PyQt6.QtWidgets import (QApplication,
     QVBoxLayout,
     QHBoxLayout,
     QTableWidget,
-    QTableWidgetItem)
+    QTableWidgetItem,
+    QTableView
+    )
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QAbstractListModel
 import userLogin
 # from userLogin import *
 
 username = None
+
+class TableModel(QAbstractListModel):
+    def __init__(self, data):
+        super(TableModel, self).__init__()
+        self._passwords = data
+
+    def data(self, index, role):
+        if role == Qt.ItemDataRole.DisplayRole:
+            return self._passwords[index.row()][index.column()]
+
+    def rowCount(self, index):
+        return len(self._passwords)
+    
+    def columnCount(self, index):
+        return len(self._passwords[0])
 
 class Window(QWidget):
     def __init__(self):
@@ -78,9 +95,14 @@ class Window(QWidget):
         self.query.setPlaceholderText("Search...")
         self.query.textChanged.connect(self.search)
 
-        self.table = QTableWidget()
+        self.table = QTableView()
+
+        data = userLogin.pull_table(username)
+
+        self.model = TableModel(data)
+        self.table.setModel(self.model)
         
-        self.table.setHorizontalHeaderLabels(["username", "password"])
+        # self.table.setHorizontalHeaderLabels(["username", "password"])
 
         self.tablePage = QWidget()
         self.tablePageLayout = QVBoxLayout()
@@ -175,7 +197,8 @@ class Window(QWidget):
             # msg.exec()
             self.stackedLayout.setCurrentIndex(1)
             self.username = self.lineEdit_username.text()
-            print(self.username)
+            username = self.lineEdit_username.text()
+            # print(self.username)
             self.populate_table()
         else:
             # msg.setText('Incorrect Password')
@@ -218,27 +241,29 @@ class Window(QWidget):
     #     print(username)
 
     def add_password(self):
-        print(self.username)
+        # print(self.username)
         userLogin.add_password(self.username, self.lineEditNew_username.text(), self.lineEditNew_password.text())
-        self.populate_table
+        self.model.layoutChanged.emit()
+        # self.populate_table
         self.stackedLayout.setCurrentIndex(1)
 
     def populate_table(self):
         data = userLogin.pull_table(self.username)
+        self.model._passwords = data
+        self.model.layoutChanged.emit()
 
-        if not len(data)==0:
-            # self.tablePageLayout.removeWidget(self.table)
+        # if not len(data)==0:
+        #     # self.tablePageLayout.removeWidget(self.table)
 
-            self.table.setRowCount(len(data))
-            self.table.setColumnCount(len(data[0]))
+        #     self.table.setRowCount(len(data))
+        #     self.table.setColumnCount(len(data[0]))
 
-            for c in range(len(data)):
-                for r in range(len(data[0])):
-                    x = QTableWidgetItem(data[c][r])
-                    self.table.setItem(c, r, x)
+        #     for c in range(len(data)):
+        #         for r in range(len(data[0])):
+        #             x = QTableWidgetItem(data[c][r])
+        #             self.table.setItem(c, r, x)
 
             # self.tablePageLayout.addWidget(self.table)
-            
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
